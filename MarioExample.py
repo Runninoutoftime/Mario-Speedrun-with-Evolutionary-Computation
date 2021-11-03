@@ -17,8 +17,12 @@ class MarioExample():
         env.reset()
 
         while i < 1000:
+            # Comment out to remove human-viewable game screen for faster performance
             env.render()
-            state, reward, done, info = env.step(int(x[i]))
+
+            # Attempt to split Actions Per Ssecond by 4 from 60 -> 15
+            for i in range(4):
+                state, reward, done, info = env.step(int(x[i]))
             i = i + 1
             
             # Checks if mario is stuck (NOTE NEEDS WORK TO STORE OLD DATA AND REPLACE WITH NEW DATA)
