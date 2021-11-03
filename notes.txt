@@ -1,3 +1,9 @@
 ---------
 Might want to include a repair function if mario is stuck, something like
 if stuck, try jumping for a few frames?
+---------
+Issue - Mario gets stuck at the pipes that require long jumps.
+Mutation has a small chance of correcting it because it would need to correct
+several specific frames out of 3000.
+Fix - ???????
+---------
