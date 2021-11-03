@@ -1,0 +1,3 @@
+---------
+Might want to include a repair function if mario is stuck, something like
+if stuck, try jumping for a few frames?
