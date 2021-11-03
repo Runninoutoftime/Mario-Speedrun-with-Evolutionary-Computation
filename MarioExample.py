@@ -8,16 +8,6 @@ env = JoypadSpace(env, SIMPLE_MOVEMENT)
 
 class MarioExample():
 
-    def __init__(self):
-        self.top = 0
-
-    def getTop(self):
-        return self.top
-
-    def setI(self, i):
-        if i > self.top:
-            self.top = i
-
     def playGame(self, x):
         lastX = 0
         counter = 0
@@ -26,8 +16,8 @@ class MarioExample():
 
         env.reset()
 
-        while i < 3000:
-            #env.render()
+        while i < 1000:
+            env.render()
             state, reward, done, info = env.step(int(x[i]))
             i = i + 1
             
@@ -36,20 +26,9 @@ class MarioExample():
                 counter = counter + 1
                 counter2 = counter2 + 1
 
-            #Repair?
-            if counter2 > 10:
-                #for x in range(0, 5):
-                state, reward, done, info = env.step(5)
-                state, reward, done, info = env.step(5)
-                state, reward, done, info = env.step(4)
-                
-                counter2 = 0
-
             # If mario dies or is stuck 15 times
-            if info['life'] == 0 or counter == 30:
+            if info['life'] == 0 or counter == 50 or i == 999:
                 env.reset()
-                self.setI(i)
-                print(self.getTop())
                 return 0 - info['x_pos']
 
             lastX = info['x_pos']

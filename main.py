@@ -4,9 +4,9 @@ from MarioProblem import MarioProblem, MarioMutation
 from pymoo.factory import get_crossover, get_sampling
 
 sampling = get_sampling('int_random')
-crossover = get_crossover("real_two_point")
+crossover = get_crossover("int_sbx")
 
-algorithm = GA(pop_size=10, sampling=sampling, crossover=crossover) #mutation=MarioMutation())
+algorithm = GA(pop_size=5, sampling=sampling, crossover=crossover) #mutation=MarioMutation())
 
 
 
