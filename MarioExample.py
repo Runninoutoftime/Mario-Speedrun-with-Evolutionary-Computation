@@ -1,5 +1,5 @@
 from nes_py.wrappers import JoypadSpace
-import gym_super_mario_bros
+import gym_super_mario_bros, data
 from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
 env = gym_super_mario_bros.make('SuperMarioBros-v0')
 env = JoypadSpace(env, SIMPLE_MOVEMENT)
@@ -16,23 +16,29 @@ class MarioExample():
 
         env.reset()
 
-        while i < 1000:
+        while i < 3000:
             # Comment out to remove human-viewable game screen for faster performance
             env.render()
 
             # Attempt to split Actions Per Ssecond by 4 from 60 -> 15
-            for i in range(4):
+            for r in range(4):
                 state, reward, done, info = env.step(int(x[i]))
-            i = i + 1
             
+            #print(i)
+            i = i + 1
+
             # Checks if mario is stuck (NOTE NEEDS WORK TO STORE OLD DATA AND REPLACE WITH NEW DATA)
             if lastX == info['x_pos']:
                 counter = counter + 1
                 counter2 = counter2 + 1
 
-            # If mario dies or is stuck 15 times
-            if info['life'] == 0 or counter == 50 or i == 999:
+            # If mario dies or is stuck 50 times
+            if info['life'] == 0 or counter == 100 or i == 3000:
                 env.reset()
+
+                if data.furthest < i:
+                    data.furthest = i
+
                 return 0 - info['x_pos']
 
             lastX = info['x_pos']
