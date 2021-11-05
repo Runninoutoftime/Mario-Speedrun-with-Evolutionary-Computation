@@ -1,4 +1,5 @@
 import autograd.numpy as anp
+import numpy as np
 from pymoo.core.problem import ElementwiseProblem
 from MarioExample import MarioExample
 from pymoo.core.mutation import Mutation
@@ -22,7 +23,23 @@ class MarioMutation(Mutation):
 
     # Use data.furthest here! Look at previous 50 frames maybe?
     def _do(self, problem, X, **kwargs):
-        print(kwargs.values())
+
+        # X is the array of indivs
+        # Row is indiv
+        # Col is genes
+        print(data.furthest)
+        for i in range(len(X)):
+            for x in range(len(X[i])):
+                if x > data.furthest - 25 and x < data.furthest:
+                    r = np.random.random()
+
+                    # Add duplicate detection
+                    if r < 0.2:
+                        X[i,x] = np.random.randint(0,6)
+                    
+        return X
+
+        
 
     def addToList(q):
         list.append(q)
