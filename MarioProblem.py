@@ -7,14 +7,25 @@ import data
 
 class MarioProblem(ElementwiseProblem):
 
+    # This single objective works perfectly
     # Initializes a random list of integers of length 3000, each integer ranging from 0-6 (inclusive)
-    def __init__(self):
-        super().__init__(n_var=3000, n_obj=1, n_constr=0, xl=0, xu=6, type = anp.integer)
+    # def __init__(self):
+    #     super().__init__(n_var=3000, n_obj=1, n_constr=0, xl=0, xu=6, type = anp.integer)
     
+    # def _evaluate(self, x, out, *args, **kwargs):
+    #     out["F"]= MarioExample().playGame(x)
+
+    def __init__(self):
+        super().__init__(n_var=3000, n_obj=2, n_constr=0, xl=0, xu=6, type=anp.integer)
+
     def _evaluate(self, x, out, *args, **kwargs):
-        out["F"]= MarioExample().playGame(x)
+        dist, time = MarioExample().playGame(x)
+        print("DIST:", dist)
+        print("TIME:", time)
+        out["F"] = [dist, time]
 
 # TODO
+# Looks at the previous x frames before mario died and only mutates within that range
 class MarioMutation(Mutation):
 
     def __init__(self):
@@ -27,15 +38,21 @@ class MarioMutation(Mutation):
         # X is the array of indivs
         # Row is indiv
         # Col is genes
-        print(data.furthest)
         for i in range(len(X)):
             for x in range(len(X[i])):
                 if x > data.furthest - 25 and x < data.furthest:
                     r = np.random.random()
 
                     # Add duplicate detection
+                    # Current mutation chance is below
                     if r < 0.2:
                         X[i,x] = np.random.randint(0,6)
+                
+                # Still has a (much) smaller chance of mutating genes outside of the "death range"
+                s = np.random.random()
+                if s < .05:
+                    X[i,x] = np.random.randint(0,6)
+
                     
         return X
 

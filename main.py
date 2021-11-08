@@ -1,5 +1,5 @@
 from pymoo.algorithms.soo.nonconvex.ga import GA
-import numpy as np
+from pymoo.algorithms.moo.nsga2 import NSGA2
 from pymoo.optimize import minimize
 from MarioProblem import MarioProblem, MarioMutation
 from pymoo.factory import get_crossover, get_sampling
@@ -18,8 +18,8 @@ sampling = get_sampling('int_random')
 #crossover = get_crossover("int_two_point") I had better results with int_sbx
 crossover = get_crossover("int_sbx")
 
-algorithm = GA(pop_size=5, sampling=sampling, crossover=crossover, mutation=MarioMutation())
-
+#algorithm = GA(pop_size=2, sampling=sampling, crossover=crossover, mutation=MarioMutation())
+algorithm = NSGA2(pop_size=10, mutation=MarioMutation())
 
 def check_termination():
     if data.furthest == 3000:
@@ -34,4 +34,4 @@ res = minimize(MarioProblem(), algorithm, ("n_gen", 100), seed=2, copy_algorithm
 # checkpoint = np.load("checkpoint.npy", allow_pickle=True).flatten()
 # print("Loaded checkpoint: ", checkpoint)
 
-print("Best solution found: \nX = %s\nF = %s" % (res.X, res.F))
+#print("Best solution found: \nX = %s\nF = %s" % (res.X, res.F))
