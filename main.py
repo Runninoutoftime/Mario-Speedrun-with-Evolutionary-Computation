@@ -1,37 +1,27 @@
+from numpy.core.numeric import cross
 from pymoo.algorithms.soo.nonconvex.ga import GA
-from pymoo.algorithms.moo.nsga2 import NSGA2
+from pymoo.algorithms.moo.nsga2 import NSGA2, binary_tournament
 from pymoo.optimize import minimize
-from MarioProblem import MarioProblem, MarioMutation
-from pymoo.factory import get_crossover, get_sampling
+from pymoo.util.display import Display
+from MarioOperators import MarioCrossover, MarioSampling, MarioProblem, MarioMutation, MarioSelection
+from MarioProblem import MarioDisplay
+from pymoo.factory import get_crossover, get_sampling, get_selection
 from pymoo.interface import crossover
+from pymoo.core.population import Population
 import data
 
-
-# f = open("data.txt", "w")
-# f.write(str(1))
-# f.truncate()
+data.pop_size = 4
 data.furthest = 1
 data.time = 500
+data.ids = {}
+data.times = [0] * data.pop_size
 
-
-sampling = get_sampling('int_random')
-#crossover = get_crossover("int_two_point") I had better results with int_sbx
-crossover = get_crossover("int_sbx")
+#selection = get_selection('tournament', {'pressure' : 2, 'func_comp' : binary_tournament})
 
 #algorithm = GA(pop_size=2, sampling=sampling, crossover=crossover, mutation=MarioMutation())
-algorithm = NSGA2(pop_size=10, mutation=MarioMutation())
+#algorithm = NSGA2(pop_size=2, mutation=MarioMutation(), crossover=crossover, sampling=MarioSampling())
+algorithm = NSGA2(pop_size=data.pop_size, sampling=MarioSampling(), crossover=MarioCrossover(), mutation=MarioMutation()) #selection=MarioSelection())
+SingleObjAlgo = GA(pop_size=10, crossover=crossover)
 
-def check_termination():
-    if data.furthest == 3000:
-        return True
-    return False
-
-res = minimize(MarioProblem(), algorithm, ("n_gen", 100), seed=2, copy_algorithm=False, verbose=True) #termination=check_termination())
-
-# Working on checkpoints for potential long-runtime ability
-# np.save("checkpoint", algorithm)
-
-# checkpoint = np.load("checkpoint.npy", allow_pickle=True).flatten()
-# print("Loaded checkpoint: ", checkpoint)
-
-#print("Best solution found: \nX = %s\nF = %s" % (res.X, res.F))
+res = minimize(MarioProblem(), algorithm, ("n_gen", 100), seed=1, copy_algorithm=False, verbose=True, display=MarioDisplay())
+#res = minimize(MarioProblemMulti(), algorithm, mut)

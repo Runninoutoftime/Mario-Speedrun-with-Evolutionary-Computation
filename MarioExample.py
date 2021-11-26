@@ -10,9 +10,9 @@ env = JoypadSpace(env, SIMPLE_MOVEMENT)
 class MarioExample():
 
     def playGame(self, x):
+        
         lastX = 0
         counter = 0
-        counter2 = 0
         i = 0
 
         env.reset()
@@ -22,38 +22,29 @@ class MarioExample():
             env.render()
 
 
-            # Attempt to split Actions Per Ssecond by 4 from 60 -> 15
+            # Splits Actions Per Ssecond by 4 from 60 -> 15
             for r in range(4):
                 state, reward, done, info = env.step(int(x[i]))
 
+                # If mario dies, is stuck, or the game ends
                 if info['life'] == 1 or counter == 100 or i == 3000 or done:
                 
                     env.reset()
 
                     if data.furthest < i:
                         data.furthest = i
+                    # if data.ids[id] < i:
+                    #     data.ids[id] = i
+
                 # Want to maximize distance, maximize time
-                    return 0 - info['x_pos'], 0 - info['time']
+                    return 0 - info['x_pos'], 0 - info['time'], i
             
             i = i + 1
-            #print(info['life'])
 
-            # Checks if mario is stuck (NOTE NEEDS WORK TO STORE OLD DATA AND REPLACE WITH NEW DATA)
+            # Mario stuck counter (NOTE NEEDS WORK TO STORE OLD DATA AND REPLACE WITH NEW DATA)
             if lastX == info['x_pos']:
                 counter = counter + 1
-                counter2 = counter2 + 1
 
-            # If mario dies or is stuck
-            # ISSUE: When mario dies, the life doesnt update til he respawns I believe,
-            # which causes the distance and time to be returned as the deafault 40 and 400
-            if info['life'] == 1 or counter == 100 or i == 3000:
-                
-                #env.reset()
-
-                if data.furthest < i:
-                    data.furthest = i
-                # Want to maximize distance, maximize time
-                return 0 - info['x_pos'], 0 - info['time']
 
             lastX = info['x_pos']
 
