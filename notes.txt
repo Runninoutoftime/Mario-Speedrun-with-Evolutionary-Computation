@@ -1,14 +1,2 @@
----------
-Might want to include a repair function if mario is stuck, something like
-if stuck, try jumping for a few frames?
----------
-Issue - Mario gets stuck at the pipes that require long jumps.
-Mutation has a small chance of correcting it because it would need to correct
-several specific frames out of 3000.
-Fix - ???????
----------
-Record: 1,320! @ run 11 - First iteration
-Record: 2,226! @ run 11 - Implementation of last 25 genes being mutated (BEAT THE GAME @ GEN 17!    )
----------
-Something that a paper mentioned was to look at the last few genes before mario was terminated
-and to specifically mutate those genes
+TODO
+- Get 
