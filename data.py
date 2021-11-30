@@ -6,3 +6,5 @@ ids = {}
 times = []
 # Determines pop size (default 10)
 pop_size = 10
+# Determines size of individuals (default 1000)
+size = 1000
