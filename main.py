@@ -26,7 +26,7 @@ res = minimize(MarioProblemDistance(), distAlgorithm, ("n_gen", 30), seed=1, cop
 #res = minimize(MarioProblemMulti(), algorithm, mut)
 
 
-#with open('NumpyData.npy', 'wb') as f:
-#    np.save(f, res.pop.get("X"))
+with open('NumpyData.npy', 'wb') as f:
+    np.save(f, res.pop.get("X"))
 
 # ISSUE - The program is getting type errors
