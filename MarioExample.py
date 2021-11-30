@@ -4,6 +4,8 @@ import gym_super_mario_bros, data
 from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
 import retro
 
+from time import sleep
+
 env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0')
 #env = retro.make('SuperMarioBros-1-1-v0', record='.')
 env = JoypadSpace(env, SIMPLE_MOVEMENT)
@@ -15,6 +17,7 @@ env = JoypadSpace(env, SIMPLE_MOVEMENT)
 class MarioExample():
 
     def playGame(self, x):
+        import time
         
         lastX = 0
         counter = 0
@@ -24,7 +27,9 @@ class MarioExample():
 
         while i < data.size - 1:
             # Comment out to remove human-viewable game screen for faster performance
-            #env.render()
+            env.render()
+            # Renders game in 60 fps
+            time.sleep(.0166)
 
 
             # Splits Actions Per Ssecond by 4 from 60 -> 15

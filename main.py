@@ -22,11 +22,11 @@ data.times = [0] * data.pop_size
 distAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_k_point', n_points=3), mutation=MarioMutationFurthest())#mutation=get_mutation('int_pm', prob=1.0))
 
 
-res = minimize(MarioProblemDistance(), distAlgorithm, ("n_gen", 30), seed=1, copy_algorithm=False, verbose=True, save_history=True)
+res = minimize(MarioProblemDistance(), distAlgorithm, ("n_gen", 1), seed=1, copy_algorithm=False, verbose=True, save_history=True)
 #res = minimize(MarioProblemMulti(), algorithm, mut)
 
 
-with open('NumpyData.npy', 'wb') as f:
-    np.save(f, res.pop.get("X"))
+# with open('NumpyData.npy', 'wb') as f:
+#     np.save(f, res.pop.get("X"))
 
 # ISSUE - The program is getting type errors
