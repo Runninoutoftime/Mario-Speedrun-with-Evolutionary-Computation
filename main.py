@@ -1,17 +1,14 @@
 import numpy as np
-from numpy.core.numeric import cross
 from pymoo.algorithms.soo.nonconvex.ga import GA
-from pymoo.algorithms.moo.nsga2 import NSGA2, binary_tournament
 from pymoo.optimize import minimize
 from pymoo.util.display import Display
-from MarioOperators import MarioMutationFurthest, MarioSampling, MarioProblemDistance, MarioMutation, MarioSelection
-from MarioProblem import MarioDisplay
-from pymoo.factory import get_crossover, get_mutation, get_sampling, get_selection
-from pymoo.interface import crossover
-from pymoo.core.population import Population
+from MarioOperators import MarioMutationFurthest, MarioSampling, MarioProblemDistance, MarioTermination
+from pymoo.factory import get_crossover
 import data
 
-data.pop_size = 30
+
+# Intiialization variables
+data.pop_size = 5
 data.size = 1000
 data.furthest = 1
 data.time = 500
@@ -19,14 +16,49 @@ data.ids = {}
 data.times = [0] * data.pop_size
 
 
-distAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_k_point', n_points=3), mutation=MarioMutationFurthest())#mutation=get_mutation('int_pm', prob=1.0))
+# with open('NumpyData.npy', 'rb') as f:
+#     print(np.load(f))
 
 
-res = minimize(MarioProblemDistance(), distAlgorithm, ("n_gen", 1), seed=1, copy_algorithm=False, verbose=True, save_history=True)
-#res = minimize(MarioProblemMulti(), algorithm, mut)
+# Total number of different GAs to use
+runs = 10
+i = 0
+distAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_exp', prob=0.9), mutation=MarioMutationFurthest())
+bestPop = []
 
 
-# with open('NumpyData.npy', 'wb') as f:
-#     np.save(f, res.pop.get("X"))
+# Finds the individual with the best distance fitness in the population
+def findMinIndiv(res):
 
-# ISSUE - The program is getting type errors
+    minIndex = np.argmin(res.pop.get("F"))
+    finalArray = res.pop.get("X")
+    minIndiv = finalArray[minIndex]
+
+    return minIndiv
+
+
+# Runs different GAs "runs" amount of times then stores the values of the best indivs in each GA to NumpyData.npy
+while i < runs:
+
+    # Generates random int for seed
+    r = np.random.randint(10000000)
+    print("Seed: ", r)
+
+    # Resets data variables for each run
+    data.dist = 0
+    data.furthest = 1
+
+    # Runs minimization algorithm for GA
+    res = minimize(MarioProblemDistance(), distAlgorithm, seed=r, copy_algorithm=True, verbose=True, save_history=True, termination=MarioTermination())
+    
+    # Finds individual with best fitness for distance
+    minIndiv = findMinIndiv(res)
+
+    # Stores all the best individuals from each run into bestPop
+    bestPop.append(minIndiv)
+
+    i = i + 1
+
+# Saves bestPop into a file for later use
+with open('NumpyData.npy', 'wb') as f:
+    np.save(f, bestPop, allow_pickle=True)
