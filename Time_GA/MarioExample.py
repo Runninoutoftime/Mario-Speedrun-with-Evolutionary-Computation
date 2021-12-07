@@ -40,12 +40,12 @@ class MarioExample():
             # Comment out to remove human-viewable game screen for faster performance
             #************************************************************************
             #env.render()
+            #time.sleep(.0166)
             #************************************************************************
             
             
             # Renders game in 60 fps for recording purposes
-            # time.sleep(.0166)
-
+            
 
             # Each action takes place for 4 frames
             for r in range(4):
@@ -67,16 +67,13 @@ class MarioExample():
                     dist = info['x_pos']
                     time = info['time']
                     gene = i
-
-                    # Updates data.furthest to be the furthest gene that any individual made it to
-                    if gene > data.furthest:
-                        data.furthest = gene
                     
-                    # Updates data.dist to be the furthest x_pos any individual has been
-                    if dist > data.dist:
-                        data.dist = dist
+                    # Updates data.time to be the fastest an individual has completed.
+                    if time > data.time:
+                        data.time = time
                     
                     # Returns negative of dist and time because we can only minimize through pymoo
+                    print(info)
                     return 0 - dist, 0 - time, gene
             
 
