@@ -79,13 +79,5 @@ class MarioExample():
 
             i = i + 1
 
-            # Checks if mario is stuck
-            if lastX == info['x_pos']:
-                counter = counter + 1
-            if lastX > info['x_pos']:
-                counter = 0
-
-            lastX = info['x_pos']
-
 
 

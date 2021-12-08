@@ -82,7 +82,7 @@ class MarioTermination(Termination):
     
     def _do_continue(self, algorithm, **kwargs):
 
-        if self.i >= 10:
+        if self.i >= 100:
             return False
         else:
             return True

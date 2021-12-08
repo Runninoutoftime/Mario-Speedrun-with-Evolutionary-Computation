@@ -3,12 +3,12 @@ from pymoo.algorithms.soo.nonconvex.ga import GA
 from pymoo.optimize import minimize
 from pymoo.util.display import Display
 from MarioOperators import MarioMutationFurthest, MarioSampling, MarioProblemDistance, MarioTermination
-from pymoo.factory import get_crossover, get_mutation
+from pymoo.factory import get_crossover, get_mutation, get_selection
 import data
 
 
 # Intiialization variables
-data.pop_size = 5
+data.pop_size = 20
 data.size = 1000
 data.furthest = 1
 data.time = 400
@@ -20,9 +20,10 @@ data.times = [0] * data.pop_size
 #    print(np.load(f))
 
 # Total number of different GAs to use
-runs = 10
+
+runs = 30
 i = 0
-timeAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_exp', prob=0), mutation=get_mutation("int_pm", prob=.05))
+timeAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_exp', prob=0.3), mutation=get_mutation("int_pm", prob=.3))
 bestPop = []
 
 
@@ -58,5 +59,5 @@ while i < runs:
     print(i)
 
 # Saves bestPop into a file for later use
-with open('TimeResult2.npy', 'wb') as f:
+with open('TimeResult.npy', 'wb') as f:
     np.save(f, bestPop, allow_pickle=True)
