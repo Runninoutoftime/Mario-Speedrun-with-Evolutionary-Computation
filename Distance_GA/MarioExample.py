@@ -2,6 +2,9 @@ from nes_py.wrappers import JoypadSpace
 import gym_super_mario_bros, data
 from numpy.lib.function_base import average
 from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
+from PIL import Image
+import cv2
+import numpy as np
 
 
 env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0')
@@ -12,10 +15,14 @@ env = JoypadSpace(env, SIMPLE_MOVEMENT)
 # Max x_pos = 3000
 
 
+
+
+
+
 # Input into play game the number of the run and match it to an array in data.py for mutation
 class MarioExample():
 
-    def playGame(self, x):
+    def playGame(self):
         import time
         
         # Stores x_pos of mario from last step
@@ -39,13 +46,17 @@ class MarioExample():
 
             # Comment out to remove human-viewable game screen for faster performance
             #************************************************************************
-            env.render()
+            pixels = env.render(mode="rgb_array")
             #************************************************************************
-            
+            print(pixels)
+            np_array = cv2.resize(pixels, dsize=(64, 60), interpolation=cv2.INTER_CUBIC)
+            img = Image.fromarray(np_array)
+            img.show()
             
             # Renders game in 60 fps for recording purposes
             time.sleep(.0166)
 
+            x = 0# NN prediction
 
             # Each action takes place for 4 frames
             for r in range(4):
