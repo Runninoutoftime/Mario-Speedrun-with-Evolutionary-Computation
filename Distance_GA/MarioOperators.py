@@ -32,7 +32,7 @@ class MarioProblemDistance(ElementwiseProblem):
 
     def _evaluate(self, x, out, *args, **kwargs):
 
-        dist, time, death = MarioExample().playGame(x)
+        dist, time, death = MarioExample().playGame()
 
         out["F"] = dist
 
