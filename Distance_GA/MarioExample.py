@@ -7,7 +7,7 @@ import cv2
 import numpy as np
 
 
-env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0')
+env = gym_super_mario_bros.make('SuperMarioBros-1-1-v1')
 env = JoypadSpace(env, SIMPLE_MOVEMENT)
 
 # In SIMPLE_MOVEMENT: 0 = no action, 1 = right, 2 = right + A, 3 = right + B, 4 = right + A + B, 5 = A, 6 = left
@@ -46,30 +46,32 @@ class MarioExample():
 
             # Comment out to remove human-viewable game screen for faster performance
             #************************************************************************
-            pixels = env.render(mode="rgb_array")
+            #pixels = env.render(mode="rgb_array")
+            env.render()
             #************************************************************************
-            print(pixels)
-            np_array = cv2.resize(pixels, dsize=(64, 60), interpolation=cv2.INTER_CUBIC)
-            img = Image.fromarray(np_array)
-            img.show()
+            # print(pixels)
+            # np_array = cv2.resize(pixels, dsize=(64, 60), interpolation=cv2.INTER_CUBIC)
+            # img = Image.fromarray(np_array)
+            # img.show()
             
             # Renders game in 60 fps for recording purposes
             time.sleep(.0166)
 
             x = 0# NN prediction
+            i = 0
 
             # Each action takes place for 4 frames
             for r in range(4):
 
                 # Maps values from individual to correct action in gym-super-mario-bros simple movement dataset (commented above class)
-                if x[i] == 0:
-                    action = 1
-                elif x[i] == 1:
-                    action = 3
-                elif x[i] == 2:
-                    action = 4
+                # if x[i] == 0:
+                #     action = 1
+                # elif x[i] == 1:
+                #     action = 3
+                # elif x[i] == 2:
+                #     action = 4
 
-                
+                action = 1
                 state, reward, done, info = env.step(action)
 
                 # If mario dies, is stuck, or the game ends
