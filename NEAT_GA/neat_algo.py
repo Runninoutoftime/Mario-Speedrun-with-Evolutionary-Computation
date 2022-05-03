@@ -88,7 +88,7 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                     neat.DefaultSpeciesSet, neat.DefaultStagnation,
                     "/home/will/Documents/ExpandedMarioProject/Mario-Speedrun-with-Evolutionary-Computation/NEAT_GA/config-recurrent")
 
-p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_18')
+p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_28')
 
 # p = neat.Population(config)
 p.add_reporter(neat.StdOutReporter(True))
