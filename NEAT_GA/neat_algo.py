@@ -88,13 +88,13 @@ config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                     neat.DefaultSpeciesSet, neat.DefaultStagnation,
                     "/home/will/Documents/ExpandedMarioProject/Mario-Speedrun-with-Evolutionary-Computation/NEAT_GA/config-recurrent")
 
-p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_28')
+p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_32')
 
 # p = neat.Population(config)
 p.add_reporter(neat.StdOutReporter(True))
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)
-p.add_reporter(neat.Checkpointer(5, filename_prefix="rn-config-3o-run_"))
+p.add_reporter(neat.Checkpointer(10, filename_prefix="3840nn-"))
 pe = neat.ParallelEvaluator(10, eval_genomes)
 
 winner = p.run(pe.evaluate)

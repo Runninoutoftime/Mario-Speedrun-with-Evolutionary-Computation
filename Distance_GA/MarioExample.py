@@ -22,7 +22,7 @@ env = JoypadSpace(env, SIMPLE_MOVEMENT)
 # Input into play game the number of the run and match it to an array in data.py for mutation
 class MarioExample():
 
-    def playGame(self):
+    def playGame(self, x):
         import time
         
         # Stores x_pos of mario from last step
@@ -47,7 +47,7 @@ class MarioExample():
             # Comment out to remove human-viewable game screen for faster performance
             #************************************************************************
             #pixels = env.render(mode="rgb_array")
-            env.render()
+            #env.render()
             #************************************************************************
             # print(pixels)
             # np_array = cv2.resize(pixels, dsize=(64, 60), interpolation=cv2.INTER_CUBIC)
@@ -57,19 +57,19 @@ class MarioExample():
             # Renders game in 60 fps for recording purposes
             time.sleep(.0166)
 
-            x = 0# NN prediction
+            # x = 0# NN prediction
             i = 0
 
             # Each action takes place for 4 frames
             for r in range(4):
 
                 # Maps values from individual to correct action in gym-super-mario-bros simple movement dataset (commented above class)
-                # if x[i] == 0:
-                #     action = 1
-                # elif x[i] == 1:
-                #     action = 3
-                # elif x[i] == 2:
-                #     action = 4
+                if x[i] == 0:
+                    action = 0
+                elif x[i] == 1:
+                    action = 1
+                elif x[i] == 2:
+                    action = 2
 
                 action = 1
                 state, reward, done, info = env.step(action)

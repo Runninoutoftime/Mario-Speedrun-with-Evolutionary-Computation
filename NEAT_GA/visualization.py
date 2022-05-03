@@ -17,7 +17,7 @@ xor_inputs = []
 xor_outputs = [(0), (1), (2)]
 config_file = "/home/will/Documents/ExpandedMarioProject/Mario-Speedrun-with-Evolutionary-Computation/NEAT_GA/config"
 
-env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0')
+env = gym_super_mario_bros.make('SuperMarioBros-1-1-v3')
 env = JoypadSpace(env, SIMPLE_MOVEMENT)
 
 
@@ -31,8 +31,8 @@ def eval_genomes(genomes, config):
 
         ob, _, _, _ = env.step(env.action_space.sample())
 
-        inx = int(ob.shape[0]/8)
-        iny = int(ob.shape[1]/8)
+        inx = int(ob.shape[0]/3)
+        iny = int(ob.shape[1]/3)
         done = False
         
         net = neat.nn.RecurrentNetwork.create(genome, config)
@@ -44,13 +44,16 @@ def eval_genomes(genomes, config):
         imgarray = []
         
         while not done:
-            #self.env.render()
+            # ob = env.reset()
+            # env.render('rgb_array')
+
             ob = cv2.resize(ob, (inx, iny))
             ob = cv2.cvtColor(ob, cv2.COLOR_BGR2GRAY)
             ob = np.reshape(ob, (inx, iny))
+            cv2.imshow("Test", ob)
             
             imgarray = np.ndarray.flatten(ob)
-            imgarray = np.interp(imgarray, (0, 254), (-1, +1))
+            # imgarray = np.interp(imgarray, (0, 254), (-1, +1))
             actions = net.activate(imgarray)
 
             ind = 0
@@ -80,12 +83,19 @@ def eval_genomes(genomes, config):
             if xpos > 3100:
                 fitness += 100000
                 done = True
+                
+            key = cv2.waitKey(1)
+            if key == ord('q'):
+                break
+    
 
 
 def run(config_file):
-
-    p = neat.Checkpointer.restore_checkpoint('ff-config-run_239')
-    print(p)
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                    neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                    "/home/will/Documents/ExpandedMarioProject/Mario-Speedrun-with-Evolutionary-Computation/NEAT_GA/config-recurrent")
+    p = neat.Population(config)
+    #p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_32')
 
     winner = p.run(eval_genomes, 1)
 
