@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import numpy as np
 from pymoo.algorithms.soo.nonconvex.ga import GA
 from pymoo.optimize import minimize
@@ -21,7 +22,7 @@ data.times = [0] * data.pop_size
 
 
 # Total number of different GAs to use
-runs = 10
+runs = 1
 i = 0
 distAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_exp', prob=0.9), mutation=MarioMutationFurthest())
 bestPop = []
@@ -58,6 +59,14 @@ while i < runs:
     bestPop.append(minIndiv)
 
     i = i + 1
+
+evals = np.array([e.evaluator.n_eval for e in res.history])
+opt = np.array([e.opt[0].F for e in res.history])
+
+plt.title("Convergence")
+plt.plot(evals, 0 - opt, "--")
+plt.yscale("log")
+plt.show()
 
 # Saves bestPop into a file for later use
 with open('NumpyData.npy', 'wb') as f:
