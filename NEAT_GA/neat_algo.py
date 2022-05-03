@@ -94,10 +94,10 @@ p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_32')
 p.add_reporter(neat.StdOutReporter(True))
 stats = neat.StatisticsReporter()
 p.add_reporter(stats)
-p.add_reporter(neat.Checkpointer(10, filename_prefix="3840nn-"))
+p.add_reporter(neat.Checkpointer(10, filename_prefix=""))
 pe = neat.ParallelEvaluator(10, eval_genomes)
 
-winner = p.run(pe.evaluate)
+winner = p.run(pe.evaluate, 1)
 
 with open('winner.pkl', 'wb') as output:
     pickle.dump(winner, output, 1)

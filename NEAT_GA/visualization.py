@@ -3,6 +3,7 @@ import neat
 import cv2
 from nes_py.wrappers import JoypadSpace
 from numpy.lib.function_base import average
+import visualize
 from gym_super_mario_bros.actions import SIMPLE_MOVEMENT
 
 import gym_super_mario_bros
@@ -17,7 +18,7 @@ xor_inputs = []
 xor_outputs = [(0), (1), (2)]
 config_file = "/home/will/Documents/ExpandedMarioProject/Mario-Speedrun-with-Evolutionary-Computation/NEAT_GA/config"
 
-env = gym_super_mario_bros.make('SuperMarioBros-1-1-v3')
+env = gym_super_mario_bros.make('SuperMarioBros-1-1-v0')
 env = JoypadSpace(env, SIMPLE_MOVEMENT)
 
 
@@ -31,8 +32,8 @@ def eval_genomes(genomes, config):
 
         ob, _, _, _ = env.step(env.action_space.sample())
 
-        inx = int(ob.shape[0]/3)
-        iny = int(ob.shape[1]/3)
+        inx = int(ob.shape[0]/8)
+        iny = int(ob.shape[1]/8)
         done = False
         
         net = neat.nn.RecurrentNetwork.create(genome, config)
@@ -46,14 +47,15 @@ def eval_genomes(genomes, config):
         while not done:
             # ob = env.reset()
             # env.render('rgb_array')
-
+            # cv2.imwrite("regular.jpg", cv2.cvtColor(ob, cv2.COLOR_BGR2GRAY))
             ob = cv2.resize(ob, (inx, iny))
             ob = cv2.cvtColor(ob, cv2.COLOR_BGR2GRAY)
             ob = np.reshape(ob, (inx, iny))
-            cv2.imshow("Test", ob)
+            # cv2.imshow("Test", ob)
+            # cv2.imwrite("downsampled.jpg", ob)
             
             imgarray = np.ndarray.flatten(ob)
-            # imgarray = np.interp(imgarray, (0, 254), (-1, +1))
+            imgarray = np.interp(imgarray, (0, 254), (-1, +1))
             actions = net.activate(imgarray)
 
             ind = 0
@@ -94,10 +96,23 @@ def run(config_file):
     config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
                     neat.DefaultSpeciesSet, neat.DefaultStagnation,
                     "/home/will/Documents/ExpandedMarioProject/Mario-Speedrun-with-Evolutionary-Computation/NEAT_GA/config-recurrent")
-    p = neat.Population(config)
-    #p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_32')
+    # p = neat.Population(config)
+    p = neat.Checkpointer.restore_checkpoint('rn-config-3o-run_32')
 
-    winner = p.run(eval_genomes, 1)
+    winner = p.run(eval_genomes, 2)
 
+    with open('winner_vis.pkl', 'wb') as f:
+        np.save(f, winner, allow_pickle=True)
 
 run(config_file)
+
+with open('winner_vis.pkl', 'rb') as f:
+    winner = np.load(f, allow_pickle=True)
+
+    config = neat.Config(neat.DefaultGenome, neat.DefaultReproduction,
+                    neat.DefaultSpeciesSet, neat.DefaultStagnation,
+                    "/home/will/Documents/ExpandedMarioProject/Mario-Speedrun-with-Evolutionary-Computation/NEAT_GA/config-recurrent")
+
+    visualize.draw_net(config, winner, view=True)
+
+
