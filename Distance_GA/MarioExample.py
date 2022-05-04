@@ -46,18 +46,12 @@ class MarioExample():
 
             # Comment out to remove human-viewable game screen for faster performance
             #************************************************************************
-            #pixels = env.render(mode="rgb_array")
             #env.render()
             #************************************************************************
-            # print(pixels)
-            # np_array = cv2.resize(pixels, dsize=(64, 60), interpolation=cv2.INTER_CUBIC)
-            # img = Image.fromarray(np_array)
-            # img.show()
             
             # Renders game in 60 fps for recording purposes
             time.sleep(.0166)
 
-            # x = 0# NN prediction
             i = 0
 
             # Each action takes place for 4 frames

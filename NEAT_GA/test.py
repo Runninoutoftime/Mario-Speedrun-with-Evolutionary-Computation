@@ -1,6 +1,14 @@
 import pickle
+import graphviz
+import os
+os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
 
+node_attrs = {
+    'shape': 'circle',
+    'fontsize': '9',
+    'height': '0.2',
+    'width': '0.2'}
 
-gen, config, pop, species_set, rndstate = pickle.load( open("winner.pkl", "rb"))
+dot = graphviz.Digraph(format='svg', node_attr=node_attrs)
 
-print(gen)
+dot.render("Digraph.gv.svg", view=True)

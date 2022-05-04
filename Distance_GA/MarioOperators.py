@@ -36,11 +36,13 @@ class MarioProblemDistance(ElementwiseProblem):
 
         out["F"] = dist
 
+# This class is used in DSGA1
+# It mutates genes within 40 genes from where Mario failed
 class MarioMutationFurthest(Mutation):
     def __init__(self):
         super().__init__()
 
-    # This looks at the furthest the best individual in the population has gone, then mutates with a high rate within 50 genes from where it died (r)
+    # This looks at the furthest the best individual in the population has gone, then mutates with a high rate within 40 genes from where it died (r)
     # Outside this range of genes, a small mutation rate is still applied (s)
     def _do(self, problem, X, **kwargs):
 
@@ -61,6 +63,21 @@ class MarioMutationFurthest(Mutation):
 
         return X
 
+# This class is used in DSGA2
+# It mutates all genes with probability of 0.1
+class MarioMutationFurthest2(Mutation):
+    def __init__(self):
+        super().__init__()
+
+    def _do(self, problem, X, **kwargs):
+
+        for i in range(len(X)):
+            for x in range(len(X[i])):
+                s = np.random.random()
+                if s < .1:
+                    X[i,x] = np.random.randint(0,3)
+
+        return X
 
 # Terminates mario once furthest x_pos distance is 3000 or greater
 class MarioTermination(Termination):

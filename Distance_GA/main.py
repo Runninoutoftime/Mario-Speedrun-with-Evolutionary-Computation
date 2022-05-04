@@ -1,4 +1,5 @@
 import numpy as np
+from Distance_GA.MarioOperators import MarioMutationFurthest2
 from pymoo.algorithms.soo.nonconvex.ga import GA
 from pymoo.optimize import minimize
 from pymoo.util.display import Display
@@ -8,24 +9,26 @@ import data
 import matplotlib.pyplot as plt
 
 
-# Intiialization variables
+# Intiialization variables overriding defaults set i ndata.py
 data.pop_size = 5
-data.size = 1000
+data.size = 3000
 data.furthest = 1
 data.time = 500
 data.ids = {}
 data.times = [0] * data.pop_size
 
 
-term = get_termination("n_eval", 10)
-# with open('NumpyData.npy', 'rb') as f:
-#     print(np.load(f))
-
 
 # Total number of different GAs to use
 runs = 1
 i = 0
-distAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_exp', prob=0.9), mutation=MarioMutationFurthest())
+
+# DSGA1
+# distAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_two_point', n_points=2), mutation=MarioMutationFurthest())
+
+# DSGA2
+# distAlgorithm = GA(pop_size=data.pop_size, sampling=MarioSampling(), crossover=get_crossover('int_two_point', n_points=3), mutation=MarioMutationFurthest2())
+
 bestPop = []
 
 
@@ -61,14 +64,13 @@ while i < runs:
 
     i = i + 1
 
+# Variables with history for visualization purposes
 n_evals = np.array([e.evaluator.n_eval for e in res.history])
 opt = np.array([e.opt[0].F for e in res.history])
 
+# Visualizes results
 plt.title("Convergence")
 plt.plot(n_evals, 0 - opt, "--")
 plt.yscale("log")
 plt.show()
 
-# Saves bestPop into a file for later use
-# with open('NumpyData.npy', 'wb') as f:
-#     np.save(f, bestPop, allow_pickle=True)
